@@ -1,24 +1,25 @@
 # go-jl
 
-`go-jl` provides 
+Show the "JSON within JSON" log nicely
 
 ## Usage
 
-```go
-package main
+Simple case:
 
-import (
-    "fmt"
-)
-
-func main() {
-
+```cmd
+$ echo '{"foo":"{\"bar\":\"{\\\"baz\\\":123}\"}"}' | jl
+{
+ "foo": {
+  "bar": {
+   "baz": 123
+  }
+ }
 }
 ```
 
 ## Installation
 
-    go get github.com/bayashi/go-jl
+    go install github.com/bayashi/go-jl/cmd/jl@latest
 
 ## License
 
