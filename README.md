@@ -27,7 +27,7 @@ Full options:
 Options:
   -h, --help         Display help (This message) and exit
   -p, --prettify     Prettify the JSON
-  -e, --show-error   Set this option to show errors
+  -e, --show-error   Set this option to show errors, muted by default
   -v, --version      Display version and build info and exit
 ```
 
