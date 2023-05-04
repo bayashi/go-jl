@@ -57,11 +57,11 @@ func TestProcess(t *testing.T) {
 
 		// JSON within JSON complecated
 		{
-			in: `{"a":"{\"h\":\"{\\\"i\\\":12,\\\"j\\\":34,\\\"k\\\":\\\"{\\\\\\\"l\\\\\\\":\\\\\\\"[null,0,0.1,3,\\\\\\\\\\\\\\\"5\\\\\\\\\\\\\\\"]\\\\\\\"}\\\"}\"}","b":"[1,2,3,4,\"{\\\"g\\\":\\\"good\\\",\\\"c\\\":null,\\\"d\\\":1.2,\\\"e\\\":12}\"]"}`,
+			in:     `{"a":"{\"h\":\"{\\\"i\\\":12,\\\"j\\\":34,\\\"k\\\":\\\"{\\\\\\\"l\\\\\\\":\\\\\\\"[null,0,0.1,3,\\\\\\\\\\\\\\\"5\\\\\\\\\\\\\\\"]\\\\\\\"}\\\"}\"}","b":"[1,2,3,4,\"{\\\"g\\\":\\\"good\\\",\\\"c\\\":null,\\\"d\\\":1.2,\\\"e\\\":12}\"]"}`,
 			expect: `{"a":{"h":{"i":12,"j":34,"k":{"l":[null,0,0.1,3,"5"]}}},"b":[1,2,3,4,{"c":null,"d":1.2,"e":12,"g":"good"}]}`,
 		},
 		{
-			in: `{"message": "{\"level\":\"info\",\"ts\":1557004280.5372975,\"caller\":\"zap/server_interceptors.go:40\",\"msg\":\"finished unary call with code OK\",\"grpc.start_time\":\"2019-05-04T21:11:20Z\",\"system\":\"grpc\",\"span.kind\":\"server\",\"grpc.service\":\"FooService\",\"grpc.method\":\"GetBar\",\"grpc.code\":\"OK\",\"grpc.time_ms\":248.45199584960938}\n","namespace": "foo-service","podName": "foo-86495899d8-m2vfl","containerName": "foo-service"}`,
+			in:     `{"message": "{\"level\":\"info\",\"ts\":1557004280.5372975,\"caller\":\"zap/server_interceptors.go:40\",\"msg\":\"finished unary call with code OK\",\"grpc.start_time\":\"2019-05-04T21:11:20Z\",\"system\":\"grpc\",\"span.kind\":\"server\",\"grpc.service\":\"FooService\",\"grpc.method\":\"GetBar\",\"grpc.code\":\"OK\",\"grpc.time_ms\":248.45199584960938}\n","namespace": "foo-service","podName": "foo-86495899d8-m2vfl","containerName": "foo-service"}`,
 			expect: `{"containerName":"foo-service","message":{"caller":"zap/server_interceptors.go:40","grpc.code":"OK","grpc.method":"GetBar","grpc.service":"FooService","grpc.start_time":"2019-05-04T21:11:20Z","grpc.time_ms":248.45199584960938,"level":"info","msg":"finished unary call with code OK","span.kind":"server","system":"grpc","ts":1557004280.5372975},"namespace":"foo-service","podName":"foo-86495899d8-m2vfl"}`,
 		},
 	}
