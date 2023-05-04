@@ -1,0 +1,24 @@
+builds:
+  - env:
+      - CGO_ENABLED=0
+    id: "go-jl"
+    binary: jl
+    goos:
+      - linux
+      - darwin
+      - windows
+    ldflags: -s -w -X main.version={{.Version}} -X "main.installFrom=Binary"
+archives:
+  - format_overrides:
+      - goos: windows
+        format: zip
+brews:
+  - tap:
+      owner: bayashi
+      name: homebrew-go-jl
+      token: "{{ .Env.HOMEBREW_TAP_GITHUB_TOKEN }}"
+    folder: Formula
+    homepage: https://github.com/bayashi/go-jl
+    description: Show the "JSON within JSON" log nicely
+    test: |
+      system "#{bin}/jl", '--version'
