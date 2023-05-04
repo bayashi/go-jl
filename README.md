@@ -11,7 +11,7 @@ Show the "JSON within JSON" log nicely
 Simple case:
 
 ```cmd
-$ echo '{"foo":"{\"bar\":\"{\\\"baz\\\":123}\"}"}' | jl
+$ echo '{"foo":"{\"bar\":\"{\\\"baz\\\":123}\"}"}' | jl -p
 {
  "foo": {
   "bar": {
@@ -19,6 +19,17 @@ $ echo '{"foo":"{\"bar\":\"{\\\"baz\\\":123}\"}"}' | jl
   }
  }
 }
+```
+
+Full options:
+
+```
+Usage: jl [OPTIONS] FILE
+Options:
+  -h, --help         Display help (This message) and exit
+  -p, --prettify     Prettify the JSON
+  -e, --show-error   Set this option to show errors
+  -v, --version      Display version and build info and exit
 ```
 
 ## Installation
