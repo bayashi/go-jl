@@ -34,6 +34,21 @@ Options:
 
 ## Installation
 
+### homebrew install
+
+If you are using Mac:
+
+    brew tap bayashi/go-jl
+    brew install bayashi/go-jl/jl
+
+### binary install
+
+Download binary from here: https://github.com/bayashi/go-jl/releases
+
+### go install
+
+If you have golang envvironment:
+
     go install github.com/bayashi/go-jl/cmd/jl@latest
 
 ## License
