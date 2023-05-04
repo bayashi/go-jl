@@ -24,7 +24,6 @@ $ echo '{"foo":"{\"bar\":\"{\\\"baz\\\":123}\"}"}' | jl -p
 Full options:
 
 ```
-Usage: jl [OPTIONS] FILE
 Options:
   -h, --help         Display help (This message) and exit
   -p, --prettify     Prettify the JSON
