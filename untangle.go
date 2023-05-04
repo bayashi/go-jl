@@ -29,7 +29,8 @@ func untangle(raw *json.RawMessage, pks *[]PathKey, flatters *[]Flatter) error {
 		if len(sortedKeys) == 0 {
 			return fmt.Errorf("blank object")
 		}
-		current := *pks
+		current := make([]PathKey, len(*pks))
+		copy(current, *pks)
 		for _, k := range sortedKeys {
 			*pks = append(current, PathKey{keyType: keyTypeObject, key: k})
 			h := j[k]
@@ -44,10 +45,11 @@ func untangle(raw *json.RawMessage, pks *[]PathKey, flatters *[]Flatter) error {
 		if len(j) == 0 {
 			return fmt.Errorf("blank array")
 		}
-		current := *pks
-		for i, v := range j {
+		current := make([]PathKey, len(*pks))
+		copy(current, *pks)
+		for i := range j {
 			*pks = append(current, PathKey{keyType: keyTypeArray, key: fmt.Sprint(i)})
-			untangle(&v, pks, flatters)
+			untangle(&j[i], pks, flatters)
 		}
 	default:
 		var value any

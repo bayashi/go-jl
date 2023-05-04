@@ -38,6 +38,10 @@ func TestProcess(t *testing.T) {
 			in:     `[["a","{\"b\":1.2}"]]`,
 			expect: `[["a",{"b":1.2}]]`,
 		},
+		{
+			in:     `[{"a":"{\"b\":\"[\\\"aiko\\\",\\\"eiko\\\"]\"}"}]`,
+			expect: `[{"a":{"b":["aiko","eiko"]}}]`,
+		},
 	}
 
 	for _, tt := range tts {
