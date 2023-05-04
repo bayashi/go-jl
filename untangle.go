@@ -27,7 +27,7 @@ func untangle(raw *json.RawMessage, pks *[]PathKey, flatters *[]Flatter) error {
 		}
 		sortedKeys := sortedKeys(j)
 		if len(sortedKeys) == 0 {
-			return fmt.Errorf("blank object")
+			*flatters = append(*flatters, Flatter{pathKeys: *pks, value: map[string]any{}})
 		}
 		current := make([]PathKey, len(*pks))
 		copy(current, *pks)
@@ -43,7 +43,7 @@ func untangle(raw *json.RawMessage, pks *[]PathKey, flatters *[]Flatter) error {
 			return err
 		}
 		if len(j) == 0 {
-			return fmt.Errorf("blank array")
+			*flatters = append(*flatters, Flatter{pathKeys: *pks, value: []any{}})
 		}
 		current := make([]PathKey, len(*pks))
 		copy(current, *pks)

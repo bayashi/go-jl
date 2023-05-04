@@ -19,6 +19,10 @@ func stitch(o *Options, flatters *[]Flatter) ([]byte, error) {
 }
 
 func stitchUp(pks []PathKey, value any, result any) any {
+	if len(pks) == 0 {
+		return value
+	}
+
 	switch pks[0].keyType {
 	case keyTypeObject:
 		return stitchUpObject(pks[0].key, pks[1:], value, result)
