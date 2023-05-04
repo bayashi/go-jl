@@ -16,6 +16,7 @@ type (
 	JsonArray  []json.RawMessage
 )
 
+// untangle converts JSON to the `Flatter` structure
 func untangle(raw *json.RawMessage, pks *[]PathKey, flatters *[]Flatter) error {
 	var firstChar = (*raw)[0]
 	switch firstChar {

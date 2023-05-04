@@ -5,16 +5,19 @@ import (
 	"os"
 )
 
+// Flatter stores path data for each value
 type Flatter struct {
 	pathKeys []PathKey
 	value    any
 }
 
+// PathKey represents a path
 type PathKey struct {
 	keyType KeyType
 	key     string
 }
 
+// KeyType represents either an object or an array
 type KeyType int
 
 const (
@@ -22,6 +25,7 @@ const (
 	keyTypeArray
 )
 
+// Options is just an option data for a process
 type Options struct {
 	Prettify bool
 	ShowErr  bool

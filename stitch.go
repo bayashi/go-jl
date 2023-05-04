@@ -5,6 +5,7 @@ import (
 	"strconv"
 )
 
+// stitch converts untangled data to JSON string
 func stitch(o *Options, flatters *[]Flatter) ([]byte, error) {
 	var result any
 	for _, flatter := range *flatters {
