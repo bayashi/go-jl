@@ -39,7 +39,7 @@ Options:
 If you are using Mac:
 
     brew tap bayashi/go-jl
-    brew install bayashi/go-jl/jl
+    brew install bayashi/go-jl/go-jl
 
 ### binary install
 
