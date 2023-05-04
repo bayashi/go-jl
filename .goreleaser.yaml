@@ -20,6 +20,6 @@ brews:
       token: "{{ .Env.HOMEBREW_TAP_GITHUB_TOKEN }}"
     folder: Formula
     homepage: https://github.com/bayashi/go-jl
-    description: Show the "JSON within JSON" log nicely
+    description: Show the `JSON within JSON` log nicely
     test: |
       system "#{bin}/jl", '--version'
