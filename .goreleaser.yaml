@@ -1,7 +1,8 @@
 builds:
   - env:
       - CGO_ENABLED=0
-    id: "go-jl"
+    main: ./cmd/jl
+    id: "jl"
     binary: jl
     goos:
       - linux
