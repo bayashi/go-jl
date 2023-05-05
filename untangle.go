@@ -9,6 +9,8 @@ import (
 const (
 	charObject = 123 // "{" -> char code 123
 	charArray  = 91  // "[" -> char code 91
+
+	maxDecodeCount = 99
 )
 
 type (
@@ -17,7 +19,7 @@ type (
 )
 
 // untangle converts JSON to the `Flatter` structure
-func untangle(raw *json.RawMessage, pks *[]PathKey, flatters *[]Flatter) error {
+func untangle(raw *json.RawMessage, pks *[]PathKey, flatters *[]Flatter, decodeCount int) error {
 	var firstChar = (*raw)[0]
 	switch firstChar {
 	case charObject:
@@ -35,7 +37,7 @@ func untangle(raw *json.RawMessage, pks *[]PathKey, flatters *[]Flatter) error {
 		for _, k := range sortedKeys {
 			*pks = append(current, PathKey{keyType: keyTypeObject, key: k})
 			h := j[k]
-			untangle(&h, pks, flatters)
+			untangle(&h, pks, flatters, decodeCount)
 		}
 	case charArray:
 		var j JsonArray
@@ -50,7 +52,7 @@ func untangle(raw *json.RawMessage, pks *[]PathKey, flatters *[]Flatter) error {
 		copy(current, *pks)
 		for i := range j {
 			*pks = append(current, PathKey{keyType: keyTypeArray, key: fmt.Sprint(i)})
-			untangle(&j[i], pks, flatters)
+			untangle(&j[i], pks, flatters, decodeCount)
 		}
 	default:
 		var value any
@@ -60,9 +62,14 @@ func untangle(raw *json.RawMessage, pks *[]PathKey, flatters *[]Flatter) error {
 		}
 		switch v := value.(type) {
 		case string:
-			bv := []byte(v)
-			if j := wouldBeJSON(&bv); j != nil {
-				untangle(j, pks, flatters)
+			if decodeCount < maxDecodeCount {
+				bv := []byte(v)
+				if j := wouldBeJSON(&bv); j != nil {
+					decodeCount++
+					untangle(j, pks, flatters, decodeCount)
+				} else {
+					*flatters = append(*flatters, Flatter{pathKeys: *pks, value: v})
+				}
 			} else {
 				*flatters = append(*flatters, Flatter{pathKeys: *pks, value: v})
 			}
