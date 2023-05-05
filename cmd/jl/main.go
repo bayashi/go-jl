@@ -3,8 +3,10 @@ package main
 import (
 	"bufio"
 	"os"
+	"syscall"
 
 	"github.com/bayashi/go-jl"
+	"golang.org/x/term"
 )
 
 const (
@@ -17,6 +19,10 @@ const (
 func main() {
 	o := &options{}
 	o.parseArgs()
+
+	if term.IsTerminal(int(syscall.Stdin)) {
+		os.Exit(exitOK)
+	}
 
 	po := &jl.Options{
 		Prettify: o.prettify,
