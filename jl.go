@@ -44,7 +44,8 @@ func Process(o *Options, origJson []byte) []byte {
 	}
 	pathKeys := []PathKey{}
 	flatters := []Flatter{}
-	err2 := untangle(&src, &pathKeys, &flatters)
+	decodeCount := 0
+	err2 := untangle(&src, &pathKeys, &flatters, decodeCount)
 	if err2 != nil {
 		if o.ShowErr {
 			os.Stdout.Write([]byte(err2.Error()))
