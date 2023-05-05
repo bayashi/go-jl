@@ -67,11 +67,7 @@ func TestProcess(t *testing.T) {
 	}
 
 	for _, tt := range tts {
-		got := Process(&Options{}, b(tt.in))
-		actually.Got(got).Expect(b(tt.expect)).X().Same(t)
+		got := Process(&Options{}, []byte(tt.in))
+		actually.Got(string(got)).Expect(tt.expect).X().Same(t)
 	}
-}
-
-func b(b string) []byte {
-	return []byte(b)
 }
