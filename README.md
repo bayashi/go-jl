@@ -12,7 +12,7 @@ Show the "JSON within JSON" log nicely
 
 Simple case:
 
-```cmd
+```
 $ cat simple.json
 {
     "foo": "{\"bar\":\"{\\\"baz\\\":123}\"}"
@@ -77,8 +77,10 @@ Options:
 
 If you are using Mac:
 
-    brew tap bayashi/go-jl
-    brew install bayashi/go-jl/go-jl
+```cmd
+brew tap bayashi/go-jl
+brew install bayashi/go-jl/go-jl
+```
 
 ### binary install
 
@@ -88,7 +90,9 @@ Download binary from here: https://github.com/bayashi/go-jl/releases
 
 If you have golang envvironment:
 
-    go install github.com/bayashi/go-jl/cmd/jl@latest
+```dmc
+go install github.com/bayashi/go-jl/cmd/jl@latest
+```
 
 ## License
 
