@@ -71,3 +71,36 @@ func TestProcess(t *testing.T) {
 		actually.Got(string(got)).Expect(tt.expect).X().Same(t)
 	}
 }
+
+func prettified() string {
+	return `
+{
+ "a": {
+  "b": 12
+ }
+}`
+}
+
+func TestProcessOptions(t *testing.T) {
+	tts := []struct {
+		in     string
+		expect string
+	}{
+		{
+			in:     `{"a":"{\"b\":12}"}`,
+			expect: prettified(),
+		},
+	}
+
+	for _, tt := range tts {
+		got := Process(&Options{Prettify: true}, []byte(tt.in))
+		actually.Got("\n" + string(got)).Expect(tt.expect).X().Same(t)
+	}
+}
+
+// Example test for error output
+func ExampleProcess() {
+	Process(&Options{ShowErr: true}, []byte("{"))
+	// Output:
+	// unexpected end of JSON input
+}
