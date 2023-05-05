@@ -71,7 +71,7 @@ func putErr(message ...interface{}) {
 }
 
 func putUsage() {
-	putErr(fmt.Sprintf("Usage: %s [OPTIONS] FILE", cmd))
+	putErr(fmt.Sprintf("Usage: cat some.json | %s", cmd))
 }
 
 func putHelp(message string) {
