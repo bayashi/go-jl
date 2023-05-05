@@ -8,10 +8,17 @@ Show the "JSON within JSON" log nicely
 
 ## Usage
 
+`jl` command recursively converts JSON within JSON into one JSON structure.
+
 Simple case:
 
 ```cmd
-$ echo '{"foo":"{\"bar\":\"{\\\"baz\\\":123}\"}"}' | jl -p
+$ cat simple.json
+{
+    "foo": "{\"bar\":\"{\\\"baz\\\":123}\"}"
+}
+
+$ cat simple.json | jl -p
 {
  "foo": {
   "bar": {
@@ -19,6 +26,39 @@ $ echo '{"foo":"{\"bar\":\"{\\\"baz\\\":123}\"}"}' | jl -p
   }
  }
 }
+```
+
+Most use cases:
+
+```
+$ cat log.json
+{
+    "message": "{\"level\":\"info\",\"ts\":1557004280.5372975,\"caller\":\"zap/server_interceptors.go:40\",\"msg\":\"finished unary call with code OK\",\"grpc.start_time\":\"2019-05-04T21:11:20Z\",\"system\":\"grpc\",\"span.kind\":\"server\",\"grpc.service\":\"FooService\",\"grpc.method\":\"GetBar\",\"grpc.code\":\"OK\",\"grpc.time_ms\":248.45199584960938}\n",
+    "namespace": "foo-service",
+    "podName": "foo-86495899d8-m2vfl",
+    "containerName": "foo-service"
+}
+
+$ cat log.json | jl -p
+{
+    "containerName": "foo-service",
+    "message": {
+        "caller": "zap/server_interceptors.go:40",
+        "grpc.code": "OK",
+        "grpc.method": "GetBar",
+        "grpc.service": "FooService",
+        "grpc.start_time": "2019-05-04T21:11:20Z",
+        "grpc.time_ms": 248.45199584960938,
+        "level": "info",
+        "msg": "finished unary call with code OK",
+        "span.kind": "server",
+        "system": "grpc",
+        "ts": 1557004280.5372975
+    },
+    "namespace": "foo-service",
+    "podName": "foo-86495899d8-m2vfl"
+}
+
 ```
 
 Full options:
