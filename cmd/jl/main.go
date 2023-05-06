@@ -27,6 +27,7 @@ func main() {
 	po := &jl.Options{
 		Prettify: o.prettify,
 		ShowErr:  o.showErr,
+		SplitTab: o.splitTab,
 	}
 
 	s := bufio.NewScanner(os.Stdin)
