@@ -17,6 +17,7 @@ var (
 type options struct {
 	prettify bool
 	showErr  bool
+	splitTab bool
 }
 
 func (o *options) parseArgs() {
@@ -26,6 +27,7 @@ func (o *options) parseArgs() {
 	flag.BoolVarP(&flagVersion, "version", "v", false, "Display version and build info and exit")
 	flag.BoolVarP(&o.prettify, "prettify", "p", false, "Prettify the JSON")
 	flag.BoolVarP(&o.showErr, "show-error", "e", false, "Set this option to show errors")
+	flag.BoolVarP(&o.splitTab, "split-tab", "t", false, "Split tabs in each element")
 	flag.Parse()
 
 	if flagHelp {

@@ -73,8 +73,7 @@ func TestProcess(t *testing.T) {
 }
 
 func prettified() string {
-	return `
-{
+	return `{
  "a": {
   "b": 12
  }
@@ -92,11 +91,21 @@ func TestProcessOptions(t *testing.T) {
 			expect:  prettified(),
 			options: &Options{Prettify: true},
 		},
+		{
+			in:      `{"a":"key\t{\"b\":12}"}`,
+			expect:  `{"a":{"key":{"b":12}}}`,
+			options: &Options{SplitTab: true},
+		},
+		{
+			in:      `{"a":"key\t{\"b\":12}\tfoo"}`,
+			expect:  `{"a":["key",{"b":12},"foo"]}`,
+			options: &Options{SplitTab: true},
+		},
 	}
 
 	for _, tt := range tts {
 		got := Process(tt.options, []byte(tt.in))
-		actually.Got("\n" + string(got)).Expect(tt.expect).X().Same(t)
+		actually.Got(string(got)).Expect(tt.expect).X().Same(t)
 	}
 }
 
