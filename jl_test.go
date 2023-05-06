@@ -83,17 +83,19 @@ func prettified() string {
 
 func TestProcessOptions(t *testing.T) {
 	tts := []struct {
-		in     string
-		expect string
+		in      string
+		expect  string
+		options *Options
 	}{
 		{
-			in:     `{"a":"{\"b\":12}"}`,
-			expect: prettified(),
+			in:      `{"a":"{\"b\":12}"}`,
+			expect:  prettified(),
+			options: &Options{Prettify: true},
 		},
 	}
 
 	for _, tt := range tts {
-		got := Process(&Options{Prettify: true}, []byte(tt.in))
+		got := Process(tt.options, []byte(tt.in))
 		actually.Got("\n" + string(got)).Expect(tt.expect).X().Same(t)
 	}
 }
