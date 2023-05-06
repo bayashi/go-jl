@@ -98,22 +98,27 @@ func untangleValue(raw *json.RawMessage, pks *[]PathKey, flatters *[]Flatter, de
 	}
 	switch v := value.(type) {
 	case string:
-		if decodeCount < maxDecodeCount {
-			bv := []byte(v)
-			if j := wouldBeJSON(&bv); j != nil {
-				decodeCount++
-				untangle(j, pks, flatters, decodeCount)
-			} else {
-				*flatters = append(*flatters, Flatter{pathKeys: *pks, value: v})
-			}
-		} else {
-			*flatters = append(*flatters, Flatter{pathKeys: *pks, value: v})
-		}
+		untangleStringValue(pks, flatters, v, decodeCount)
 	default:
 		*flatters = append(*flatters, Flatter{pathKeys: *pks, value: v})
 	}
 
 	return nil
+}
+
+func untangleStringValue(pks *[]PathKey, flatters *[]Flatter, v string, decodeCount int) {
+	if decodeCount >= maxDecodeCount {
+		*flatters = append(*flatters, Flatter{pathKeys: *pks, value: v})
+		return
+	}
+
+	bv := []byte(v)
+	if j := wouldBeJSON(&bv); j != nil {
+		decodeCount++
+		untangle(j, pks, flatters, decodeCount)
+	} else {
+		*flatters = append(*flatters, Flatter{pathKeys: *pks, value: v})
+	}
 }
 
 func wouldBeJSON(src *[]byte) *json.RawMessage {
