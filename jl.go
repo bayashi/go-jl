@@ -32,8 +32,8 @@ type Options struct {
 	SplitTab bool
 }
 
-// Process tries to convert "JSON within JSON" line to JUST Nested JSON line.
-// If there would be an error, return original JSON straightfarward.
+// Process tries to convert "JSON within JSON" line to JUST nested JSON line.
+// If there would be an error, return original JSON straightforward.
 func Process(o *Options, origJson []byte) []byte {
 	var src json.RawMessage
 	err := json.Unmarshal(origJson, &src)
