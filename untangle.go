@@ -145,6 +145,10 @@ func untangleStringValue(o *Options, pks *[]PathKey, flatters *[]Flatter, v stri
 }
 
 func wouldBeJSON(src *[]byte) *json.RawMessage {
+	if len(*src) == 0 {
+		return nil
+	}
+
 	if firstChar := (*src)[0]; firstChar != charObject && firstChar != charArray {
 		return nil
 	}
