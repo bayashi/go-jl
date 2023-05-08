@@ -13,6 +13,7 @@ func TestProcess(t *testing.T) {
 	}{
 		// not JSON
 		{in: "", expect: ""},
+		{in: `""`, expect: `""`},
 		{in: "not json", expect: "not json"},
 		{in: "{]", expect: "{]"},
 
