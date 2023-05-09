@@ -2,6 +2,7 @@
 
 <a href="https://github.com/bayashi/go-jl/blob/main/LICENSE" title="go-jl License"><img src="https://img.shields.io/badge/LICENSE-MIT-GREEN.png" alt="MIT License"></a>
 <a href="https://github.com/bayashi/go-jl/actions" title="go-jl CI"><img src="https://github.com/bayashi/go-jl/workflows/main/badge.svg" alt="go-jl CI"></a>
+<a href="https://goreportcard.com/report/github.com/bayashi/go-jl" title="go-jl report card"><img src="https://goreportcard.com/badge/github.com/bayashi/go-jl" alt="go-jl report card"></a>
 <a href="https://pkg.go.dev/github.com/bayashi/go-jl" title="Go go-jl package reference" target="_blank"><img src="https://pkg.go.dev/badge/github.com/bayashi/go-jl.svg" alt="Go Reference: go-jl"></a>
 
 Show the "JSON within JSON" log nicely
