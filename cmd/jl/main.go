@@ -33,7 +33,11 @@ func main() {
 	s := bufio.NewScanner(os.Stdin)
 	for s.Scan() {
 		in := s.Bytes()
-		result := jl.Process(po, in)
+		result, err := jl.Process(po, in)
+		if err != nil && po.ShowErr {
+			os.Stderr.Write([]byte(err.Error()))
+			os.Stderr.WriteString("\n")
+		}
 		os.Stdout.Write(result)
 		os.Stdout.WriteString("\n")
 	}
