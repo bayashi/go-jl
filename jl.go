@@ -2,7 +2,6 @@ package jl
 
 import (
 	"encoding/json"
-	"os"
 )
 
 // Flatter stores path data for each value
@@ -34,33 +33,25 @@ type Options struct {
 
 // Process tries to convert "JSON within JSON" line to JUST nested JSON line.
 // If there would be an error, return original JSON straightforward.
-func Process(o *Options, origJson []byte) []byte {
+func Process(o *Options, origJson []byte) ([]byte, error) {
 	var src json.RawMessage
 	err := json.Unmarshal(origJson, &src)
 	if err != nil {
-		if o.ShowErr {
-			os.Stdout.Write([]byte(err.Error()))
-		}
-		return origJson
+		return origJson, err
 	}
+
 	pathKeys := []PathKey{}
 	flatters := []Flatter{}
 	decodeCount := 0
 	err2 := untangle(o, &src, &pathKeys, &flatters, decodeCount)
 	if err2 != nil {
-		if o.ShowErr {
-			os.Stdout.Write([]byte(err2.Error()))
-		}
-		return origJson
+		return origJson, err2
 	}
 
 	result, err3 := stitch(o, &flatters)
 	if err3 != nil {
-		if o.ShowErr {
-			os.Stdout.Write([]byte(err3.Error()))
-		}
-		return origJson
+		return origJson, err3
 	}
 
-	return result
+	return result, nil
 }
