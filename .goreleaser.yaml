@@ -23,7 +23,7 @@ changelog:
 brews:
   - tap:
       owner: bayashi
-      name: homebrew-go-jl
+      name: homebrew-tap
       token: "{{ .Env.HOMEBREW_TAP_GITHUB_TOKEN }}"
     folder: Formula
     homepage: https://github.com/bayashi/go-jl
