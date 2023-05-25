@@ -80,8 +80,8 @@ Options:
 If you are using Mac:
 
 ```cmd
-brew tap bayashi/go-jl
-brew install bayashi/go-jl/go-jl
+brew tap bayashi/tap
+brew install bayashi/tap/go-jl
 ```
 
 ### binary install
