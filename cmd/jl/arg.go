@@ -29,7 +29,7 @@ func (o *options) parseArgs() {
 	flag.BoolVarP(&o.prettify, "prettify", "p", false, "Prettify the JSON")
 	flag.BoolVarP(&o.showErr, "show-error", "e", false, "Set this option to show errors, muted by default")
 	flag.BoolVarP(&o.splitTab, "split-tab", "t", false, "Split tabs in each element")
-	flag.BoolVarP(&o.splitLF, "split-lf", "n", false, "Split line-feed `\n` in each element")
+	flag.BoolVarP(&o.splitLF, "split-lf", "n", false, "Split line-feed \\n in each element")
 	flag.Parse()
 
 	if flagHelp {
