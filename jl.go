@@ -29,6 +29,7 @@ type Options struct {
 	Prettify bool
 	ShowErr  bool
 	SplitTab bool
+	SplitLF  bool
 }
 
 // Process tries to convert "JSON within JSON" line to JUST nested JSON line.
