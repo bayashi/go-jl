@@ -28,6 +28,7 @@ func main() {
 		Prettify: o.prettify,
 		ShowErr:  o.showErr,
 		SplitTab: o.splitTab,
+		SplitLF:  o.splitLF,
 	}
 
 	s := bufio.NewScanner(os.Stdin)

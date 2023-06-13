@@ -117,7 +117,14 @@ func untangleStringValue(o *Options, pks *[]PathKey, flatters *[]Flatter, v stri
 
 	var bv []byte
 
-	if o.SplitTab && strings.Contains(v, "\t") {
+	if o.SplitLF && strings.Contains(v, "\n") {
+		var err error
+		elements := strings.Split(v, "\n")
+		bv, err = json.Marshal(elements)
+		if err != nil {
+			return err
+		}
+	} else if o.SplitTab && strings.Contains(v, "\t") {
 		var err error
 		elements := strings.Split(v, "\t")
 		if len(elements) == 2 {
