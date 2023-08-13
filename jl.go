@@ -26,10 +26,10 @@ const (
 
 // Options is just an option data for a process
 type Options struct {
-	Prettify bool
-	ShowErr  bool
-	SplitTab bool
-	SplitLF  bool
+	NoPrettify bool
+	ShowErr    bool
+	SplitTab   bool
+	SplitLF    bool
 }
 
 // Process tries to convert "JSON within JSON" line to JUST nested JSON line.

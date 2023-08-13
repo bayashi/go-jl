@@ -5,9 +5,9 @@ import (
 )
 
 func FuzzJlProcess(f *testing.F) {
-	f.Fuzz(func(t *testing.T, prettify bool, showErr bool, splitTab bool, splitLF bool, data []byte) {
+	f.Fuzz(func(t *testing.T, noPrettify bool, showErr bool, splitTab bool, splitLF bool, data []byte) {
 		options := &Options{
-			Prettify: prettify,
+			NoPrettify: noPrettify,
 			ShowErr:  showErr,
 			SplitTab: splitTab,
 			SplitLF:  splitLF,

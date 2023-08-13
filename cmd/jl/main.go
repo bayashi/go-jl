@@ -25,7 +25,7 @@ func main() {
 	}
 
 	po := &jl.Options{
-		Prettify: o.prettify,
+		NoPrettify: o.noPrettify,
 		ShowErr:  o.showErr,
 		SplitTab: o.splitTab,
 		SplitLF:  o.splitLF,

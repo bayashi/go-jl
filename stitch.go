@@ -12,10 +12,10 @@ func stitch(o *Options, flatters *[]Flatter) ([]byte, error) {
 		result = stitchUp(flatter.pathKeys, flatter.value, result)
 	}
 
-	if o.Prettify {
-		return json.MarshalIndent(result, "", " ")
-	} else {
+	if o.NoPrettify {
 		return json.Marshal(result)
+	} else {
+		return json.MarshalIndent(result, "", " ")
 	}
 }
 

@@ -77,7 +77,7 @@ func TestProcess(t *testing.T) {
 
 	for _, tt := range tts {
 		t.Run(tt.in, func(t *testing.T) {
-			got, err := Process(&Options{}, []byte(tt.in))
+			got, err := Process(&Options{NoPrettify: true}, []byte(tt.in))
 
 			if len(tt.err) != 0 {
 				actually.Got(err.Error()).Expect(tt.err).Same(t)
@@ -107,27 +107,27 @@ func TestProcessOptions(t *testing.T) {
 		{
 			in:      `{"a":"{\"b\":12}"}`,
 			expect:  prettified(),
-			options: &Options{Prettify: true},
+			options: &Options{},
 		},
 		{
 			in:      `{"a":"key\t{\"b\":12}"}`,
 			expect:  `{"a":{"key":{"b":12}}}`,
-			options: &Options{SplitTab: true},
+			options: &Options{SplitTab: true, NoPrettify: true},
 		},
 		{
 			in:      `{"a":"key\t{\"b\":12}\tfoo"}`,
 			expect:  `{"a":["key",{"b":12},"foo"]}`,
-			options: &Options{SplitTab: true},
+			options: &Options{SplitTab: true, NoPrettify: true},
 		},
 		{
 			in:      `{"a":"key\n{\"b\":12}\nfoo"}`,
 			expect:  `{"a":["key",{"b":12},"foo"]}`,
-			options: &Options{SplitLF: true},
+			options: &Options{SplitLF: true, NoPrettify: true},
 		},
 		{
 			in:      `{"a":"foo\nbar\tbaz"}`,
 			expect:  `{"a":["foo",{"bar":"baz"}]}`,
-			options: &Options{SplitLF: true, SplitTab: true},
+			options: &Options{SplitLF: true, SplitTab: true, NoPrettify: true},
 		},
 	}
 
