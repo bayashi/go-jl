@@ -15,10 +15,10 @@ var (
 )
 
 type options struct {
-	prettify bool
-	showErr  bool
-	splitTab bool
-	splitLF  bool
+	noPrettify bool
+	showErr    bool
+	splitTab   bool
+	splitLF    bool
 }
 
 func (o *options) parseArgs() {
@@ -26,7 +26,7 @@ func (o *options) parseArgs() {
 	var flagVersion bool
 	flag.BoolVarP(&flagHelp, "help", "h", false, "Display help (This message) and exit")
 	flag.BoolVarP(&flagVersion, "version", "v", false, "Display version and build info and exit")
-	flag.BoolVarP(&o.prettify, "prettify", "p", false, "Prettify the JSON")
+	flag.BoolVarP(&o.noPrettify, "no-prettify", "P", false, "Not prettify the JSON. Prettified by default")
 	flag.BoolVarP(&o.showErr, "show-error", "e", false, "Set this option to show errors, muted by default")
 	flag.BoolVarP(&o.splitTab, "split-tab", "t", false, "Split tabs in each element")
 	flag.BoolVarP(&o.splitLF, "split-lf", "n", false, "Split line-feed \\n in each element")

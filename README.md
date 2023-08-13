@@ -19,7 +19,7 @@ $ cat simple.json
     "foo": "{\"bar\":\"{\\\"baz\\\":123}\"}"
 }
 
-$ cat simple.json | jl -p
+$ cat simple.json | jl
 {
  "foo": {
   "bar": {
@@ -40,7 +40,7 @@ $ cat log.json
     "containerName": "foo-service"
 }
 
-$ cat log.json | jl -p
+$ cat log.json | jl
 {
     "containerName": "foo-service",
     "message": {
@@ -67,7 +67,7 @@ Full options:
 ```
 Options:
   -h, --help         Display help (This message) and exit
-  -p, --prettify     Prettify the JSON
+  -P, --no-prettify  Not prettify the JSON. Prettified by default
   -e, --show-error   Set this option to show errors, muted by default
   -n, --split-lf     Split line-feed \n in each element
   -t, --split-tab    Split tabs in each element
