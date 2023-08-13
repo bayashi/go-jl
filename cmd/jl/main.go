@@ -14,6 +14,8 @@ const (
 
 	exitOK  int = 0
 	exitErr int = 1
+
+	errPrefix = "JLERROR: "
 )
 
 func main() {
@@ -36,7 +38,7 @@ func main() {
 		in := s.Bytes()
 		result, err := jl.Process(po, in)
 		if err != nil && po.ShowErr {
-			os.Stderr.Write([]byte(err.Error()))
+			os.Stderr.Write([]byte(errPrefix + err.Error()))
 			os.Stderr.WriteString("\n")
 		}
 		os.Stdout.Write(result)
