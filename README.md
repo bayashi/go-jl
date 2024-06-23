@@ -66,12 +66,13 @@ Full options:
 
 ```
 Options:
-  -h, --help         Display help (This message) and exit
-  -P, --no-prettify  Not prettify the JSON. Prettified by default
-  -e, --show-error   Set this option to show errors, muted by default
-  -n, --split-lf     Split line-feed \n in each element
-  -t, --split-tab    Split tabs in each element
-  -v, --version      Display version and build info and exit
+  -h, --help          Display help (This message) and exit
+  -P, --no-prettify   Not prettify the JSON. Prettified by default
+  -e, --show-error    Set this option to show errors, muted by default
+      --skip int      Skip to parse JSON if the length of the source JSON less than this
+  -n, --split-lf      Split line-feed \n in each element
+  -t, --split-tab     Split tabs in each element
+  -v, --version       Display version and build info and exit
 ```
 
 ## Installation
