@@ -19,6 +19,7 @@ type options struct {
 	showErr    bool
 	splitTab   bool
 	splitLF    bool
+	skip       int
 }
 
 func (o *options) parseArgs() {
@@ -30,6 +31,7 @@ func (o *options) parseArgs() {
 	flag.BoolVarP(&o.showErr, "show-error", "e", false, "Set this option to show errors, muted by default")
 	flag.BoolVarP(&o.splitTab, "split-tab", "t", false, "Split tabs in each element")
 	flag.BoolVarP(&o.splitLF, "split-lf", "n", false, "Split line-feed \\n in each element")
+	flag.IntVarP(&o.skip, "skip", "", 0, "Skip to parse JSON if the length of the source JSON less than this")
 	flag.Parse()
 
 	if flagHelp {
