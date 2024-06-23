@@ -43,8 +43,15 @@ func Process(o *Options, origJson []byte) ([]byte, error) {
 
 	pathKeys := []PathKey{}
 	flatters := []Flatter{}
-	decodeCount := 0
-	err2 := untangle(o, &src, &pathKeys, &flatters, decodeCount)
+
+	c := &untangleCtx{
+		o:           o,
+		raw:         &src,
+		pks:         &pathKeys,
+		flatters:    &flatters,
+		decodeCount: 0,
+	}
+	err2 := untangle(c)
 	if err2 != nil {
 		return origJson, err2
 	}
