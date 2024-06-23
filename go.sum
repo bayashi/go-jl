@@ -1,7 +1,11 @@
-github.com/bayashi/actually v0.11.4 h1:mSQkIjy0roh7M/HnotLywA4xvnJ7V2LEIgdH7GniuS0=
-github.com/bayashi/actually v0.11.4/go.mod h1:t/CPjz4FmuRKLae3ZY3u51j4J+I5EaucYFkJbDebs+4=
+github.com/bayashi/actually v0.28.0 h1:53I+AxD8xq9Cm2ubTZo+3PQ2SGzxgz/YMyC4FZ2wbPU=
+github.com/bayashi/actually v0.28.0/go.mod h1:KMJ0YCpdUDKaxdjpfiRg64WpPBrjTxCL3y57xQGPYjY=
+github.com/bayashi/witness v0.0.20 h1:4SOvdrf7L6dPN8ldy2wet9tFHRimBuVOdd1vRhOGoFI=
+github.com/bayashi/witness v0.0.20/go.mod h1:xxXU08y35qzkp0kDRGVYuvHB5JVxFKe6vF16puu7gEo=
 github.com/davecgh/go-spew v1.1.1 h1:vj9j/u1bqnvCEfJOwUhtlOARqs3+rkHYY13jYWTU97c=
 github.com/davecgh/go-spew v1.1.1/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
+github.com/google/go-cmp v0.6.0 h1:ofyhxvXcZhMsU5ulbFiLKl/XBFqE1GSq7atu8tAmTRI=
+github.com/google/go-cmp v0.6.0/go.mod h1:17dUlkBOakJ0+DkrSSNjCkIjxS6bF9zb3elmeNGIjoY=
 github.com/pmezard/go-difflib v1.0.0 h1:4DBwDE0NGyQoBHbLQYPwSUPoCMWR5BEzIk/f1lZbAQM=
 github.com/pmezard/go-difflib v1.0.0/go.mod h1:iKH77koFhYxTK1pcRnkKkqfTogsbg7gZNVY4sRDYZ/4=
 github.com/spf13/pflag v1.0.5 h1:iy+VFUOCP1a+8yFto/drg2CJ5u0yRoB7fZw3DKv/JXA=
