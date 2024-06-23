@@ -129,6 +129,11 @@ func TestProcessOptions(t *testing.T) {
 			expect:  `{"a":["foo",{"bar":"baz"}]}`,
 			options: &Options{SplitLF: true, SplitTab: true, NoPrettify: true},
 		},
+		{
+			in:      `{"a":"{\"b\":12}"}`,
+			expect:  `{"a":"{\"b\":12}"}`,
+			options: &Options{Skip: 100},
+		},
 	}
 
 	for _, tt := range tts {
