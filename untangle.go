@@ -19,20 +19,28 @@ type (
 	JsonArray  []json.RawMessage
 )
 
+type untangleCtx struct {
+	o           *Options
+	raw         *json.RawMessage
+	pks         *[]PathKey
+	flatters    *[]Flatter
+	decodeCount int
+}
+
 // untangle converts JSON to the `Flatter` structure
-func untangle(o *Options, raw *json.RawMessage, pks *[]PathKey, flatters *[]Flatter, decodeCount int) error {
-	var firstChar = (*raw)[0]
+func untangle(c *untangleCtx) error {
+	var firstChar = (*c.raw)[0]
 	switch firstChar {
 	case charObject:
-		if err := untangleObject(o, raw, pks, flatters, decodeCount); err != nil {
+		if err := untangleObject(c); err != nil {
 			return err
 		}
 	case charArray:
-		if err := untangleArray(o, raw, pks, flatters, decodeCount); err != nil {
+		if err := untangleArray(c); err != nil {
 			return err
 		}
 	default:
-		if err := untangleValue(o, raw, pks, flatters, decodeCount); err != nil {
+		if err := untangleValue(c); err != nil {
 			return err
 		}
 	}
@@ -40,22 +48,23 @@ func untangle(o *Options, raw *json.RawMessage, pks *[]PathKey, flatters *[]Flat
 	return nil
 }
 
-func untangleObject(o *Options, raw *json.RawMessage, pks *[]PathKey, flatters *[]Flatter, decodeCount int) error {
+func untangleObject(c *untangleCtx) error {
 	var j JsonObject
-	err := json.Unmarshal(*raw, &j)
+	err := json.Unmarshal(*c.raw, &j)
 	if err != nil {
 		return err
 	}
 	sortedKeys := sortedKeys(j)
 	if len(sortedKeys) == 0 {
-		*flatters = append(*flatters, Flatter{pathKeys: *pks, value: map[string]any{}})
+		*c.flatters = append(*c.flatters, Flatter{pathKeys: *c.pks, value: map[string]any{}})
 	}
-	current := make([]PathKey, len(*pks))
-	copy(current, *pks)
+	current := make([]PathKey, len(*c.pks))
+	copy(current, *c.pks)
 	for _, k := range sortedKeys {
-		*pks = append(current, PathKey{keyType: keyTypeObject, key: k})
+		*c.pks = append(current, PathKey{keyType: keyTypeObject, key: k})
 		h := j[k]
-		untangle(o, &h, pks, flatters, decodeCount)
+		c.raw = &h
+		untangle(c)
 	}
 
 	return nil
@@ -72,59 +81,60 @@ func sortedKeys(obj JsonObject) []string {
 	return keys
 }
 
-func untangleArray(o *Options, raw *json.RawMessage, pks *[]PathKey, flatters *[]Flatter, decodeCount int) error {
+func untangleArray(c *untangleCtx) error {
 	var j JsonArray
-	err := json.Unmarshal(*raw, &j)
+	err := json.Unmarshal(*c.raw, &j)
 	if err != nil {
 		return err
 	}
 	if len(j) == 0 {
-		*flatters = append(*flatters, Flatter{pathKeys: *pks, value: []any{}})
+		*c.flatters = append(*c.flatters, Flatter{pathKeys: *c.pks, value: []any{}})
 	}
-	current := make([]PathKey, len(*pks))
-	copy(current, *pks)
+	current := make([]PathKey, len(*c.pks))
+	copy(current, *c.pks)
 	for i := range j {
-		*pks = append(current, PathKey{keyType: keyTypeArray, key: fmt.Sprint(i)})
-		untangle(o, &j[i], pks, flatters, decodeCount)
+		*c.pks = append(current, PathKey{keyType: keyTypeArray, key: fmt.Sprint(i)})
+		c.raw = &j[i]
+		untangle(c)
 	}
 
 	return nil
 }
 
-func untangleValue(o *Options, raw *json.RawMessage, pks *[]PathKey, flatters *[]Flatter, decodeCount int) error {
+func untangleValue(c *untangleCtx) error {
 	var value any
-	err := json.Unmarshal(*raw, &value)
+	err := json.Unmarshal(*c.raw, &value)
 	if err != nil {
 		return err
 	}
 	switch v := value.(type) {
 	case string:
-		if err := untangleStringValue(o, pks, flatters, v, decodeCount); err != nil {
+		if err := untangleStringValue(c, v); err != nil {
 			return err
 		}
 	default:
-		*flatters = append(*flatters, Flatter{pathKeys: *pks, value: v})
+		*c.flatters = append(*c.flatters, Flatter{pathKeys: *c.pks, value: v})
 	}
 
 	return nil
 }
 
-func untangleStringValue(o *Options, pks *[]PathKey, flatters *[]Flatter, v string, decodeCount int) error {
-	if decodeCount >= maxDecodeCount {
-		*flatters = append(*flatters, Flatter{pathKeys: *pks, value: v})
+func untangleStringValue(c *untangleCtx, v string) error {
+	if c.decodeCount >= maxDecodeCount {
+		*c.flatters = append(*c.flatters, Flatter{pathKeys: *c.pks, value: v})
 		return nil
 	}
 
 	var bv []byte
 
-	if o.SplitLF && strings.Contains(v, "\n") {
+	if c.o.SplitLF && strings.Contains(v, "\n") {
 		var err error
 		elements := strings.Split(v, "\n")
 		bv, err = json.Marshal(elements)
 		if err != nil {
 			return err
 		}
-	} else if o.SplitTab && strings.Contains(v, "\t") {
+	} else if c.o.SplitTab && strings.Contains(v, "\t") {
 		var err error
 		elements := strings.Split(v, "\t")
 		if len(elements) == 2 {
@@ -142,10 +152,11 @@ func untangleStringValue(o *Options, pks *[]PathKey, flatters *[]Flatter, v stri
 	}
 
 	if j := wouldBeJSON(&bv); j != nil {
-		decodeCount++
-		untangle(o, j, pks, flatters, decodeCount)
+		c.decodeCount++
+		c.raw = j
+		untangle(c)
 	} else {
-		*flatters = append(*flatters, Flatter{pathKeys: *pks, value: v})
+		*c.flatters = append(*c.flatters, Flatter{pathKeys: *c.pks, value: v})
 	}
 
 	return nil
