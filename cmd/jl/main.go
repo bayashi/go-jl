@@ -33,16 +33,19 @@ func main() {
 		SplitLF:    o.splitLF,
 	}
 
-	s := bufio.NewScanner(os.Stdin)
-	for s.Scan() {
-		in := s.Bytes()
+	r := bufio.NewScanner(os.Stdin)
+	w := bufio.NewWriter(os.Stdout)
+	e := bufio.NewWriter(os.Stderr)
+	for r.Scan() {
+		in := r.Bytes()
 		result, err := jl.Process(po, in)
 		if err != nil && po.ShowErr {
-			os.Stderr.Write([]byte(errPrefix + err.Error()))
-			os.Stderr.WriteString("\n")
+			e.Write([]byte(errPrefix + err.Error()))
+			e.Flush()
 		}
-		os.Stdout.Write(result)
-		os.Stdout.WriteString("\n")
+		result = append(result, '\n')
+		w.Write(result)
+		w.Flush()
 	}
 
 	os.Exit(exitOK)
