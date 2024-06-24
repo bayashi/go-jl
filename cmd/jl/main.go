@@ -34,18 +34,16 @@ func main() {
 	}
 
 	r := bufio.NewScanner(os.Stdin)
-	w := bufio.NewWriter(os.Stdout)
-	e := bufio.NewWriter(os.Stderr)
 	for r.Scan() {
 		in := r.Bytes()
 		result, err := jl.Process(po, in)
 		if err != nil && po.ShowErr {
-			e.Write([]byte(errPrefix + err.Error()))
-			e.Flush()
+			os.Stderr.Write([]byte(errPrefix + err.Error()))
+			os.Stderr.WriteString("\n")
 		}
 		result = append(result, '\n')
-		w.Write(result)
-		w.Flush()
+		os.Stdout.Write(result)
+		os.Stdout.WriteString("\n")
 	}
 
 	os.Exit(exitOK)
