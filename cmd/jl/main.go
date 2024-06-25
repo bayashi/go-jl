@@ -41,7 +41,6 @@ func main() {
 			os.Stderr.Write([]byte(errPrefix + err.Error()))
 			os.Stderr.WriteString("\n")
 		}
-		result = append(result, '\n')
 		os.Stdout.Write(result)
 		os.Stdout.WriteString("\n")
 	}
