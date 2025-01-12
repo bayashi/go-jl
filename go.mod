@@ -1,6 +1,6 @@
 module github.com/bayashi/go-jl
 
-go 1.21
+go 1.21.11
 
 require (
 	github.com/bayashi/actually v0.28.0
