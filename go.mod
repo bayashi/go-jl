@@ -3,7 +3,7 @@ module github.com/bayashi/go-jl
 go 1.21.11
 
 require (
-	github.com/bayashi/actually v0.33.2
+	github.com/bayashi/actually v0.34.0
 	github.com/spf13/pflag v1.0.5
 	golang.org/x/term v0.28.0
 )
