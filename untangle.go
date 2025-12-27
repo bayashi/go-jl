@@ -2,7 +2,6 @@ package jl
 
 import (
 	"encoding/json"
-	"fmt"
 	"sort"
 	"strings"
 )
@@ -19,55 +18,49 @@ type (
 	JsonArray  []json.RawMessage
 )
 
-type untangleCtx struct {
+type processCtx struct {
 	o           *Options
-	raw         *json.RawMessage
-	pks         *[]PathKey
-	flatters    *[]Flatter
 	decodeCount int
 }
 
-// untangle converts JSON to the `Flatter` structure
-func untangle(c *untangleCtx) error {
-	var firstChar = (*c.raw)[0]
+// processRecursive recursively processes JSON and expands any JSON strings found in values
+// into nested structures, returning a map[string]any or []any
+func processRecursive(c *processCtx, raw *json.RawMessage) (any, error) {
+	if len(*raw) == 0 {
+		return nil, nil
+	}
+
+	var firstChar = (*raw)[0]
 	switch firstChar {
 	case charObject:
-		if err := untangleObject(c); err != nil {
-			return err
-		}
+		return processObject(c, raw)
 	case charArray:
-		if err := untangleArray(c); err != nil {
-			return err
-		}
+		return processArray(c, raw)
 	default:
-		if err := untangleValue(c); err != nil {
-			return err
-		}
+		return processValue(c, raw)
 	}
-
-	return nil
 }
 
-func untangleObject(c *untangleCtx) error {
+func processObject(c *processCtx, raw *json.RawMessage) (any, error) {
 	var j JsonObject
-	err := json.Unmarshal(*c.raw, &j)
+	err := json.Unmarshal(*raw, &j)
 	if err != nil {
-		return err
-	}
-	sortedKeys := sortedKeys(j)
-	if len(sortedKeys) == 0 {
-		*c.flatters = append(*c.flatters, Flatter{pathKeys: *c.pks, value: map[string]any{}})
-	}
-	current := make([]PathKey, len(*c.pks))
-	copy(current, *c.pks)
-	for _, k := range sortedKeys {
-		*c.pks = append(current, PathKey{keyType: keyTypeObject, key: k})
-		h := j[k]
-		c.raw = &h
-		untangle(c)
+		return nil, err
 	}
 
-	return nil
+	result := make(map[string]any)
+	sortedKeys := sortedKeys(j)
+
+	for _, k := range sortedKeys {
+		raw := j[k]
+		value, err := processRecursive(c, &raw)
+		if err != nil {
+			return nil, err
+		}
+		result[k] = value
+	}
+
+	return result, nil
 }
 
 func sortedKeys(obj JsonObject) []string {
@@ -81,48 +74,43 @@ func sortedKeys(obj JsonObject) []string {
 	return keys
 }
 
-func untangleArray(c *untangleCtx) error {
+func processArray(c *processCtx, raw *json.RawMessage) (any, error) {
 	var j JsonArray
-	err := json.Unmarshal(*c.raw, &j)
+	err := json.Unmarshal(*raw, &j)
 	if err != nil {
-		return err
-	}
-	if len(j) == 0 {
-		*c.flatters = append(*c.flatters, Flatter{pathKeys: *c.pks, value: []any{}})
-	}
-	current := make([]PathKey, len(*c.pks))
-	copy(current, *c.pks)
-	for i := range j {
-		*c.pks = append(current, PathKey{keyType: keyTypeArray, key: fmt.Sprint(i)})
-		c.raw = &j[i]
-		untangle(c)
+		return nil, err
 	}
 
-	return nil
+	result := make([]any, 0, len(j))
+	for i := range j {
+		value, err := processRecursive(c, &j[i])
+		if err != nil {
+			return nil, err
+		}
+		result = append(result, value)
+	}
+
+	return result, nil
 }
 
-func untangleValue(c *untangleCtx) error {
+func processValue(c *processCtx, raw *json.RawMessage) (any, error) {
 	var value any
-	err := json.Unmarshal(*c.raw, &value)
+	err := json.Unmarshal(*raw, &value)
 	if err != nil {
-		return err
+		return nil, err
 	}
+
 	switch v := value.(type) {
 	case string:
-		if err := untangleStringValue(c, v); err != nil {
-			return err
-		}
+		return processStringValue(c, v)
 	default:
-		*c.flatters = append(*c.flatters, Flatter{pathKeys: *c.pks, value: v})
+		return v, nil
 	}
-
-	return nil
 }
 
-func untangleStringValue(c *untangleCtx, v string) error {
+func processStringValue(c *processCtx, v string) (any, error) {
 	if c.decodeCount >= maxDecodeCount {
-		*c.flatters = append(*c.flatters, Flatter{pathKeys: *c.pks, value: v})
-		return nil
+		return v, nil
 	}
 
 	var bv []byte
@@ -132,7 +120,7 @@ func untangleStringValue(c *untangleCtx, v string) error {
 		elements := strings.Split(v, "\n")
 		bv, err = json.Marshal(elements)
 		if err != nil {
-			return err
+			return nil, err
 		}
 	} else if c.o.SplitTab && strings.Contains(v, "\t") {
 		var err error
@@ -145,7 +133,7 @@ func untangleStringValue(c *untangleCtx, v string) error {
 			bv, err = json.Marshal(elements)
 		}
 		if err != nil {
-			return err
+			return nil, err
 		}
 	} else {
 		bv = []byte(v)
@@ -153,13 +141,10 @@ func untangleStringValue(c *untangleCtx, v string) error {
 
 	if j := wouldBeJSON(&bv); j != nil {
 		c.decodeCount++
-		c.raw = j
-		untangle(c)
-	} else {
-		*c.flatters = append(*c.flatters, Flatter{pathKeys: *c.pks, value: v})
+		return processRecursive(c, j)
 	}
 
-	return nil
+	return v, nil
 }
 
 func wouldBeJSON(src *[]byte) *json.RawMessage {

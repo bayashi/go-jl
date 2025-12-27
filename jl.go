@@ -4,26 +4,6 @@ import (
 	"encoding/json"
 )
 
-// Flatter stores path data for each value
-type Flatter struct {
-	pathKeys []PathKey
-	value    any
-}
-
-// PathKey represents a path
-type PathKey struct {
-	keyType KeyType
-	key     string
-}
-
-// KeyType represents either an object or an array
-type KeyType int
-
-const (
-	keyTypeObject KeyType = iota
-	keyTypeArray
-)
-
 // Options is just an option data for a process
 type Options struct {
 	NoPrettify bool
@@ -46,25 +26,19 @@ func Process(o *Options, origJson []byte) ([]byte, error) {
 		return origJson, err
 	}
 
-	pathKeys := []PathKey{}
-	flatters := []Flatter{}
-
-	c := &untangleCtx{
+	c := &processCtx{
 		o:           o,
-		raw:         &src,
-		pks:         &pathKeys,
-		flatters:    &flatters,
 		decodeCount: 0,
 	}
-	err2 := untangle(c)
+
+	result, err2 := processRecursive(c, &src)
 	if err2 != nil {
 		return origJson, err2
 	}
 
-	result, err3 := stitch(o, &flatters)
-	if err3 != nil {
-		return origJson, err3
+	if o.NoPrettify {
+		return json.Marshal(result)
+	} else {
+		return json.MarshalIndent(result, "", " ")
 	}
-
-	return result, nil
 }
