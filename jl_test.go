@@ -13,10 +13,10 @@ func TestProcess(t *testing.T) {
 		err    string
 	}{
 		// not JSON
-		{in: "", expect: "", err: "unexpected end of JSON input"},
-		{in: "not json", expect: "not json", err: "invalid character 'o' in literal null (expecting 'u')"},
-		{in: "{]", expect: "{]", err: "invalid character ']' looking for beginning of object key string"},
-		{in: "{[]}", expect: "{[]}", err: "invalid character '[' looking for beginning of object key string"},
+		{in: "", expect: "", err: "json: null unexpected end of JSON input"},
+		{in: "not json", expect: "not json", err: "json: invalid character o as null"},
+		{in: "{]", expect: "{]", err: "json: object of object unexpected end of JSON input"},
+		{in: "{[]}", expect: "{[]}", err: "json: cannot unmarshal array into Go value of type string"},
 
 		// Blank
 		{in: `""`, expect: `""`, err: ""},

@@ -1,9 +1,10 @@
 package jl
 
 import (
-	"encoding/json"
 	"sort"
 	"strings"
+
+	"github.com/goccy/go-json"
 )
 
 const (

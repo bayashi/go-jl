@@ -1,7 +1,7 @@
 package jl
 
 import (
-	"encoding/json"
+	"github.com/goccy/go-json"
 )
 
 // Options is just an option data for a process
