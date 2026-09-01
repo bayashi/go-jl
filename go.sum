@@ -1,5 +1,5 @@
-github.com/bayashi/actually v0.38.0 h1:ZOSxJ0DvhLBJrApYV3SX3WBBbXfrUrRH/gdHYfj1hFc=
-github.com/bayashi/actually v0.38.0/go.mod h1:Dyg+gy0ZVsiap/5crVaJmfiuk3qhFrdfqC367hWb4TU=
+github.com/bayashi/actually v0.39.0 h1:Vu68Xo3yYEPGOzjh4JZ1mme8rcBWXZIhAss/XTlZSH8=
+github.com/bayashi/actually v0.39.0/go.mod h1:Dyg+gy0ZVsiap/5crVaJmfiuk3qhFrdfqC367hWb4TU=
 github.com/davecgh/go-spew v1.1.1 h1:vj9j/u1bqnvCEfJOwUhtlOARqs3+rkHYY13jYWTU97c=
 github.com/davecgh/go-spew v1.1.1/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
 github.com/goccy/go-json v0.10.5 h1:Fq85nIqj+gXn/S5ahsiTlK3TmC85qgirsdTP/+DeaC4=
